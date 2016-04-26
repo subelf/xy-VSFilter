@@ -2,6 +2,7 @@
 *.db
 *.old
 *.opensdf
+*.opendb
 *.sdf
 *.suo
 *.user

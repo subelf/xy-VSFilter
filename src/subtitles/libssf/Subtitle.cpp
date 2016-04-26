@@ -302,7 +302,7 @@ namespace ssf
 				if(direction == L"fwbw" || direction == L"bwfw") t *= 2;
 
 				float n;
-				t = modf(t, &n);
+				t = modff(t, &n);
 
 				if(direction == L"bw" 
 				|| direction == L"fwbw" && ((int)n & 1)
