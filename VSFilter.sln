@@ -1,5 +1,7 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "subtitles", "src\subtitles\subtitles.vcxproj", "{5E56335F-0FB1-4EEA-B240-D8DC5E0608E4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{DA8461C4-7683-4360-9372-2A9E0F1795C2} = {DA8461C4-7683-4360-9372-2A9E0F1795C2}
@@ -44,7 +46,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "system", "src\thirdparty\Vi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unrar", "src\thirdparty\unrar\unrar.vcxproj", "{DA8461C4-7683-4360-9372-2A9E0F1795C2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xy_sub_filter", "src\filters\transform\vsfilter\xy_sub_filter.vcxproj", "{9ED0FE7D-079D-4777-A40F-EF9189BDDD61}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sppfactory", "src\sppfactory\sppfactory.vcxproj", "{D7C7F230-8D73-4AD9-A4D7-302F5F470952}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D514EA4D-EAFB-47A9-A437-A582CA571251} = {D514EA4D-EAFB-47A9-A437-A582CA571251}
+		{5E56335F-0FB1-4EEA-B240-D8DC5E0608E4} = {5E56335F-0FB1-4EEA-B240-D8DC5E0608E4}
+		{FC70988B-1AE5-4381-866D-4F405E28AC42} = {FC70988B-1AE5-4381-866D-4F405E28AC42}
+		{F558E2B6-62CF-4D1D-A6EA-448D159E5675} = {F558E2B6-62CF-4D1D-A6EA-448D159E5675}
+		{530890F8-CBCB-4DAB-BEDF-9FB667D0AFEE} = {530890F8-CBCB-4DAB-BEDF-9FB667D0AFEE}
+	EndProjectSection
+EndProject
 	ProjectSection(ProjectDependencies) = postProject
 		{54DDA60F-E528-4D07-A152-960A1E818680} = {54DDA60F-E528-4D07-A152-960A1E818680}
 		{BEC0CD2F-60CD-40E2-A89B-AB10E902F1D5} = {BEC0CD2F-60CD-40E2-A89B-AB10E902F1D5}
@@ -194,6 +204,14 @@ Global
 		{DA8461C4-7683-4360-9372-2A9E0F1795C2}.Release|Win32.Build.0 = Release|Win32
 		{DA8461C4-7683-4360-9372-2A9E0F1795C2}.Release|x64.ActiveCfg = Release|x64
 		{DA8461C4-7683-4360-9372-2A9E0F1795C2}.Release|x64.Build.0 = Release|x64
+		{D7C7F230-8D73-4AD9-A4D7-302F5F470952}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D7C7F230-8D73-4AD9-A4D7-302F5F470952}.Debug|Win32.Build.0 = Debug|Win32
+		{D7C7F230-8D73-4AD9-A4D7-302F5F470952}.Debug|x64.ActiveCfg = Debug|x64
+		{D7C7F230-8D73-4AD9-A4D7-302F5F470952}.Debug|x64.Build.0 = Debug|x64
+		{D7C7F230-8D73-4AD9-A4D7-302F5F470952}.Release|Win32.ActiveCfg = Release|Win32
+		{D7C7F230-8D73-4AD9-A4D7-302F5F470952}.Release|Win32.Build.0 = Release|Win32
+		{D7C7F230-8D73-4AD9-A4D7-302F5F470952}.Release|x64.ActiveCfg = Release|x64
+		{D7C7F230-8D73-4AD9-A4D7-302F5F470952}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
