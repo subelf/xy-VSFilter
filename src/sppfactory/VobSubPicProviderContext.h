@@ -1,6 +1,6 @@
 #pragma once
 
-#include "VSppfApi.h"
+#include "VSSppfApi.h"
 
 // {5C45E508-8D8E-4FB8-9933-CFA33217401B}
 DEFINE_GUID(CLSID_VobSubPicProviderContext,
