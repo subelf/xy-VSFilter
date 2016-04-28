@@ -1,9 +1,6 @@
 #pragma once
 
-#include <Unknwnbase.h>
-
 #include "..\subpic\ISubPic.h"
-
 
 // {5C45E508-8D8E-4FB8-9933-CFA332174010}
 DEFINE_GUID(CLSID_VobSubPicProviderFactory,

@@ -8,7 +8,7 @@
 #include "..\subtitles\VobSubFile.h"
 #include "..\subtitles\SSF.h"
 
-#include "VSppf.h"
+#include "VSSppf.h"
 #include "VobSubPicProviderContext.h"
 
 

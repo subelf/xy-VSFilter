@@ -4,7 +4,7 @@
 #include <streams.h>
 #include <combase.h>
 
-#include "VSppfApi.h"
+#include "VSSppfApi.h"
 
 // {5C45E508-8D8E-4FB8-9933-CFA33217401C}
 DEFINE_GUID(CLSID_VobSubPicProviderFactory,
