@@ -18,10 +18,8 @@ public:
 	DECLARE_IUNKNOWN;
 	STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void** ppv);
 
-	void Lock();
-	void Unlock();
-
-	//STDMETHODIMP CreateProvider(WCHAR * pStrSubtitlePath, ISubPicProvider ** ppProvider);
+	STDMETHODIMP_(void) Lock();
+	STDMETHODIMP_(void) Unlock();
 
 	CCritSec *GetProviderLock() { return &this->m_ProviderLock; }
 
