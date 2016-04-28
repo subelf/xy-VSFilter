@@ -19,6 +19,15 @@ CFactoryTemplate g_Templates[] =
 
 int g_cTemplates = countof(g_Templates);
 
+STDAPI DllRegisterServer()
+{
+	return AMovieDllRegisterServer2(TRUE);
+}
+
+STDAPI DllUnregisterServer()
+{
+	return AMovieDllRegisterServer2(FALSE);
+}
 
 
 CVobSubPicProviderFactory::CVobSubPicProviderFactory(LPUNKNOWN punk, HRESULT * phr)
@@ -51,7 +60,7 @@ STDMETHODIMP CVobSubPicProviderFactory::CreateContext(IVobSubPicProviderContext 
 	return hr;
 }
 
-STDMETHODIMP CVobSubPicProviderFactory::CreateProvider(IVobSubPicProviderContext *pContext, WCHAR * pStrSubtitlePath, ISubPicProvider ** ppProvider) const
+STDMETHODIMP CVobSubPicProviderFactory::CreateProvider(IVobSubPicProviderContext *pContext, WCHAR const *pStrSubtitlePath, ISubPicProvider **ppProvider) const
 {
 	if (ppProvider == nullptr)
 	{
@@ -100,7 +109,7 @@ STDMETHODIMP CVobSubPicProviderFactory::CreateProvider(IVobSubPicProviderContext
 		hr = E_FAIL;
 	}
 
-	*ppProvider = pSubProvider;
+	(*ppProvider = pSubProvider)->AddRef();
 
 	return hr;
 }
