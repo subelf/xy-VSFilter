@@ -50,13 +50,13 @@ STDMETHODIMP CVobSubPicProviderFactory::CreateContext(IVobSubPicProviderContext 
 	}
 
 	HRESULT hr = S_OK;
-	CAutoPtr<CVobSubPicProviderContext> context(new CVobSubPicProviderContext());
+	CComPtr<IVobSubPicProviderContext> context(new CVobSubPicProviderContext());
 	if (context == nullptr)
 	{
 		hr = E_FAIL;
 	}
 
-	*ppContext = context.Detach();
+	(*ppContext = context)->AddRef();
 	return hr;
 }
 
