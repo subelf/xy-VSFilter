@@ -9,12 +9,13 @@
 #include "..\subtitles\SSF.h"
 
 #include "VSSppf.h"
+#include "SubPicProviderAlfa.h"
 #include "VobSubPicProviderContext.h"
 
 
 CFactoryTemplate g_Templates[] =
 {
-	{L"CVobSubPicProviderFactory", &__uuidof(CVobSubPicProviderFactory), CreateInstance<CVobSubPicProviderFactory>},
+	{L"CVobSubPicProviderAlfaFactory", &__uuidof(CVobSubPicProviderAlfaFactory), CreateInstance<CVobSubPicProviderAlfaFactory>},
 };
 
 int g_cTemplates = countof(g_Templates);
@@ -30,19 +31,19 @@ STDAPI DllUnregisterServer()
 }
 
 
-CVobSubPicProviderFactory::CVobSubPicProviderFactory(LPUNKNOWN punk, HRESULT * phr)
-	:CUnknown(_T("CVobSubPicProviderFactory"), punk)
+CVobSubPicProviderAlfaFactory::CVobSubPicProviderAlfaFactory(LPUNKNOWN punk, HRESULT * phr)
+	:CUnknown(_T("CVobSubPicProviderEx2Factory"), punk)
 {
 }
 
-STDMETHODIMP CVobSubPicProviderFactory::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
+STDMETHODIMP CVobSubPicProviderAlfaFactory::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
 	return
-		QI(IVobSubPicProviderFactory)
+		QI(IVobSubPicProviderAlfaFactory)
 		__super::NonDelegatingQueryInterface(riid, ppv);
 }
 
-STDMETHODIMP CVobSubPicProviderFactory::CreateContext(IVobSubPicProviderContext **ppContext) const
+STDMETHODIMP CVobSubPicProviderAlfaFactory::CreateContext(IVobSubPicProviderContext **ppContext) const
 {
 	if (ppContext == nullptr)
 	{
@@ -60,7 +61,24 @@ STDMETHODIMP CVobSubPicProviderFactory::CreateContext(IVobSubPicProviderContext 
 	return hr;
 }
 
-STDMETHODIMP CVobSubPicProviderFactory::CreateProvider(IVobSubPicProviderContext *pContext, WCHAR const *pStrSubtitlePath, ISubPicProvider **ppProvider) const
+static ISubPicProviderAlfa * CreateSubPicProviderAlfa(ISubPicProviderEx *pSppx)
+{
+	if (pSppx == nullptr) return nullptr;
+
+	CComQIPtr<ISubPicProviderEx2> ifpSppx2 = pSppx;
+
+	if (ifpSppx2)
+	{
+		return new CSubPicProviderAlfaX2(ifpSppx2);
+	}
+	else
+	{
+		//TODO: return new CSubPicProviderAlfaX(pSppx);
+		return nullptr;
+	}
+}
+
+STDMETHODIMP CVobSubPicProviderAlfaFactory::CreateProvider(IVobSubPicProviderContext *pContext, WCHAR const *pStrSubtitlePath, ISubPicProviderAlfa **ppProvider) const
 {
 	if (ppProvider == nullptr)
 	{
@@ -75,7 +93,7 @@ STDMETHODIMP CVobSubPicProviderFactory::CreateProvider(IVobSubPicProviderContext
 
 	auto * const &pLock = pContextObj->GetProviderLock();
 	HRESULT hr = S_OK;
-	CComPtr<ISubPicProvider> pSubProvider;
+	CComPtr<ISubPicProviderEx> pSubProvider;
 
 	if (!pSubProvider)
 	{
@@ -104,12 +122,16 @@ STDMETHODIMP CVobSubPicProviderFactory::CreateProvider(IVobSubPicProviderContext
 		}
 	}
 
-	if (!pSubProvider)
+	CComPtr<ISubPicProviderAlfa> pSppAlfa = CreateSubPicProviderAlfa(pSubProvider);
+
+	if (!pSppAlfa)
 	{
 		hr = E_FAIL;
 	}
-
-	(*ppProvider = pSubProvider)->AddRef();
+	else
+	{
+		(*ppProvider = pSppAlfa)->AddRef();
+	}
 
 	return hr;
 }
