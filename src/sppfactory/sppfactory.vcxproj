@@ -55,6 +55,7 @@
   </ItemDefinitionGroup>
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SubPicProviderAlfa.h" />
     <ClInclude Include="VobSubPicProviderContext.h" />
     <ClInclude Include="VSSppf.h" />
@@ -72,6 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="VSSppf.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="sppfactory.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
