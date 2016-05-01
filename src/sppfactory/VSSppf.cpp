@@ -51,13 +51,17 @@ STDMETHODIMP CVobSubPicProviderAlfaFactory::CreateContext(IVobSubPicProviderCont
 	}
 
 	HRESULT hr = S_OK;
-	CComPtr<IVobSubPicProviderContext> context(new CVobSubPicProviderContext());
-	if (context == nullptr)
+	CComPtr<IVobSubPicProviderContext> apContext(new CVobSubPicProviderContext());
+	
+	if (apContext == nullptr)
 	{
 		hr = E_FAIL;
 	}
 
-	(*ppContext = context)->AddRef();
+	if (SUCCEEDED(hr))
+	{
+		(*ppContext = apContext)->AddRef();
+	}
 	return hr;
 }
 
@@ -69,7 +73,7 @@ static ISubPicProviderAlfa * CreateSubPicProviderAlfa(ISubPicProviderEx *pSppx)
 
 	if (ifpSppx2)
 	{
-		return new CSubPicProviderAlfaX2(ifpSppx2);
+		return new CSubPicProviderAlfaX2(pSppx, ifpSppx2);
 	}
 	else
 	{
@@ -122,13 +126,14 @@ STDMETHODIMP CVobSubPicProviderAlfaFactory::CreateProvider(IVobSubPicProviderCon
 		}
 	}
 
-	CComPtr<ISubPicProviderAlfa> pSppAlfa = CreateSubPicProviderAlfa(pSubProvider);
+	CComPtr<ISubPicProviderAlfa> pSppAlfa(CreateSubPicProviderAlfa(pSubProvider));
 
 	if (!pSppAlfa)
 	{
 		hr = E_FAIL;
 	}
-	else
+
+	if(SUCCEEDED(hr))
 	{
 		(*ppProvider = pSppAlfa)->AddRef();
 	}

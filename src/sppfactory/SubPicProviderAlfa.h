@@ -66,20 +66,11 @@ class CSubPicProviderAlfaX2 final :
 	public CSubPicProviderAlfaImpl
 {
 public:
-	CSubPicProviderAlfaX2(ISubPicProviderEx2* pSppx2);
+	CSubPicProviderAlfaX2(ISubPicProviderEx *pSppx, ISubPicProviderEx2 *pSppx2);
 
 	STDMETHODIMP RenderAlpha(SubPicAlfaDesc& spad, REFERENCE_TIME rt, double fps, CAtlList<CRect>& rectList);
 
 private:
 	CComPtr<ISubPicProviderEx2> m_pSppx2;
 
-private:
-	static inline ISubPicProviderEx* QuerySppxFrom(ISubPicProviderEx2* pSppx2)
-	{
-		CComQIPtr<ISubPicProviderEx> ifpSppx = pSppx2;
-		ISubPicProviderEx *pSppx = ifpSppx;
-		if (ifpSppx) pSppx->AddRef();
-
-		return pSppx;
-	}
 };

@@ -33,8 +33,8 @@ STDMETHODIMP CSubPicProviderAlfaImpl::RenderAlpha(SubPicAlfaDesc & spad, REFEREN
 	return result;
 }
 
-CSubPicProviderAlfaX2::CSubPicProviderAlfaX2(ISubPicProviderEx2 * pSppx2):
-	CSubPicProviderAlfaImpl(CSubPicProviderAlfaX2::QuerySppxFrom(pSppx2)),
+CSubPicProviderAlfaX2::CSubPicProviderAlfaX2(ISubPicProviderEx *pSppx, ISubPicProviderEx2 *pSppx2):
+	CSubPicProviderAlfaImpl(pSppx),
 	m_pSppx2(pSppx2)
 {
 }
@@ -81,8 +81,8 @@ STDMETHODIMP CSubPicProviderAlfaX2::RenderAlpha(SubPicAlfaDesc & spad, REFERENCE
 
 	if (SUCCEEDED(hr))
 	{
-		CComPtr<ISimpleSubPic> ifpSimSp = new SimpleSubpic(sub_render_frame, spd.type);
-		hr = ifpSimSp->AlphaBlt(&spd);
+		CComPtr<ISimpleSubPic> apSimSp(new SimpleSubpic(sub_render_frame, spd.type));
+		hr = apSimSp->AlphaBlt(&spd);
 	}
 
 	return hr;
