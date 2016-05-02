@@ -12,7 +12,7 @@ class CSubPicProviderAlfaImpl :
 	public ISubPicProviderAlfa
 {
 public:
-	CSubPicProviderAlfaImpl(ISubPicProviderEx *pSppx);
+	CSubPicProviderAlfaImpl(TCHAR const *pName, ISubPicProviderEx *pSppx);
 
 	DECLARE_IUNKNOWN;
 	STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void** ppv);
@@ -37,7 +37,10 @@ public:
 		return m_pSppx->IsAnimated(pos);
 	}
 
-	STDMETHODIMP RenderAlpha(SubPicAlfaDesc& spad, REFERENCE_TIME rt, double fps, CAtlList<CRect>& rectList) PURE;
+	STDMETHODIMP CreateRectList(IVobSubRectList **ppRectList);
+
+	STDMETHODIMP RenderEx(SubPicAlfaDesc& spad, REFERENCE_TIME rt, double fps, IVobSubRectList *pRectList);
+	STDMETHODIMP RenderAlpha(SubPicAlfaDesc& spad, REFERENCE_TIME rt, double fps, IVobSubRectList *pRectList) PURE;
 	STDMETHODIMP RenderAlpha(SubPicAlfaDesc& spad, REFERENCE_TIME rt, double fps, RECT& bbox);
 
 	STDMETHODIMP GetTextureSize (POSITION pos, SIZE& MaxTextureSize, SIZE& VirtualSize, POINT& VirtualTopLeft) {
@@ -70,7 +73,7 @@ class CSubPicProviderAlfaX2 final :
 public:
 	CSubPicProviderAlfaX2(ISubPicProviderEx *pSppx, ISubPicProviderEx2 *pSppx2);
 
-	STDMETHODIMP RenderAlpha(SubPicAlfaDesc& spad, REFERENCE_TIME rt, double fps, CAtlList<CRect>& rectList);
+	STDMETHODIMP RenderAlpha(SubPicAlfaDesc& spad, REFERENCE_TIME rt, double fps, IVobSubRectList *pRectList);
 
 private:
 	CComPtr<ISubPicProviderEx2> m_pSppx2;
@@ -85,7 +88,7 @@ public:
 	CSubPicProviderAlfaX(ISubPicProviderEx *pSppx);
 	~CSubPicProviderAlfaX();
 
-	STDMETHODIMP RenderAlpha(SubPicAlfaDesc& spad, REFERENCE_TIME rt, double fps, CAtlList<CRect>& rectList);
+	STDMETHODIMP RenderAlpha(SubPicAlfaDesc& spad, REFERENCE_TIME rt, double fps, IVobSubRectList *pRectList);
 
 private:
 	SubPicDesc m_lastSpd;
