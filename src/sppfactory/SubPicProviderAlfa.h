@@ -1,5 +1,7 @@
 #pragma once
 
+#include <atlbase.h>
+#include <atlcoll.h>
 #include <combase.h>
 
 #include "VSSppfApi.h"
@@ -48,7 +50,7 @@ public:
 		SubPicDesc spd;
 		spd.type = MSP_RGBA;
 
-		spd.w = spad.w; spd.h = spad.h; spd.bpp = spad.bpp;
+		spd.w = spad.w; spd.h = spad.h; spd.bpp = 32;
 		spd.pitch = spad.pitch;
 
 		spd.bits = spad.bits;
@@ -57,7 +59,7 @@ public:
 		return spd;
 	}
 
-private:
+protected:
 	CComPtr<ISubPicProviderEx> m_pSppx;
 };
 
@@ -73,4 +75,25 @@ public:
 private:
 	CComPtr<ISubPicProviderEx2> m_pSppx2;
 
+};
+
+[uuid("5C45E508-8D8E-4FB8-9933-CFA332174023")]
+class CSubPicProviderAlfaX final :
+	public CSubPicProviderAlfaImpl
+{
+public:
+	CSubPicProviderAlfaX(ISubPicProviderEx *pSppx);
+	~CSubPicProviderAlfaX();
+
+	STDMETHODIMP RenderAlpha(SubPicAlfaDesc& spad, REFERENCE_TIME rt, double fps, CAtlList<CRect>& rectList);
+
+private:
+	SubPicDesc m_lastSpd;
+
+private:
+	void ReleaseFfBuffer();
+	bool CurrentIsCompatibleTo(SubPicDesc const &spd) const;
+	void ReCreateFfBuffer(SubPicDesc const &spd);
+	void EreaseFfBuffer(CRect const &rect);
+	void RecoverRGBA(SubPicDesc const &spd, CRect const & rect);
 };

@@ -24,12 +24,9 @@ DEFINE_GUID(IID_SubPicProviderAlfa,
 
 #pragma pack(push, 1)
 struct SubPicAlfaDesc {
-	//int type; //RGBA
-	int w, h, bpp, pitch;// , pitchUV;
+	int w, h, pitch;
 	void* bits;
-	//BYTE* bitsU;
-	//BYTE* bitsV;
-	RECT vidrect; // video rectangle
+	RECT vidrect;
 };
 #pragma pack(pop)
 

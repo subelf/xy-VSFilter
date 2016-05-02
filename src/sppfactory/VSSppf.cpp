@@ -77,8 +77,7 @@ static ISubPicProviderAlfa * CreateSubPicProviderAlfa(ISubPicProviderEx *pSppx)
 	}
 	else
 	{
-		//TODO: return new CSubPicProviderAlfaX(pSppx);
-		return nullptr;
+		return new CSubPicProviderAlfaX(pSppx);
 	}
 }
 
