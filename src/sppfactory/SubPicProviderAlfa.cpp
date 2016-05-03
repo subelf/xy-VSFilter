@@ -100,11 +100,12 @@ STDMETHODIMP CSubPicProviderAlfaX2::RenderAlpha(SubPicAlfaDesc & spad, REFERENCE
 {
 	SubPicDesc spd = GetSubPicDescFrom(spad);
 
-	CSize output_size = CSize(spad.w, spad.h);
+	CSize output_size = CSize(spd.w, spd.h);
+	CRectCoor2 video_rect = CRect(0, 0, spd.w, spd.h);
 
 	CComPtr<IXySubRenderFrame> sub_render_frame;
 	HRESULT hr = m_pSppx2->RenderEx(&sub_render_frame, spd.type, 
-		output_size, output_size, spad.vidrect, rt, fps);
+		video_rect, video_rect, output_size, rt, fps);
 	
 	if (!sub_render_frame)
 	{

@@ -26,7 +26,7 @@ DEFINE_GUID(IID_SubPicProviderAlfa,
 #pragma pack(push, 1)
 struct SubPicAlfaDesc {
 	int w, h, pitch;
-	void* bits;
+	BYTE* bits;
 	RECT vidrect;
 };
 #pragma pack(pop)
