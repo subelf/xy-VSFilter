@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <OutDir>$(OutDir)$(Configuration)\</OutDir>
@@ -21,9 +21,7 @@
       <AdditionalDependencies Condition="'$(Configuration)'=='Release log' And '$(VisualStudioVersion)'&gt;'11.0'">delayimp.lib;strmbaseR.lib;dsutilR.lib;subtitlesRL.lib;subpicRL.lib;basevideofilterRL.lib;libssfR.lib;log4cplus_staticRU.lib;KasumiR.lib;unrarR.lib;systemR.lib;winmm.lib</AdditionalDependencies>
       <RegisterOutput>false</RegisterOutput>
     </Link>
-    <ResourceCompile>
-      <PreprocessorDefinitions>AFX_RESOURCE_DLL;AFX_TARG_ENU;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ResourceCompile>
+    <ResourceCompile />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile>
@@ -36,7 +34,7 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
-	  <DelayLoadDLLs>oleacc.dll</DelayLoadDLLs>
+      <DelayLoadDLLs>oleacc.dll</DelayLoadDLLs>
       <Profile>false</Profile>
     </Link>
   </ItemDefinitionGroup>
