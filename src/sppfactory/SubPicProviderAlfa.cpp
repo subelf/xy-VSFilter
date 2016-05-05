@@ -240,12 +240,10 @@ void CSubPicProviderAlfaX::ReCreateFfBuffer(SubPicDesc const & spd)
 void CSubPicProviderAlfaX::EreaseFfBuffer(CRect const & rect)
 {
 	bool const &fYDirectionPositive = (rect.top <= rect.bottom);
-	//int const &yStep = fYDirectionPositive ? 1 : -1;
 	int const &yTrueTop = fYDirectionPositive ? rect.top : (rect.bottom - 1);
 	int const &yTrueBottom = fYDirectionPositive ? rect.bottom : (rect.top - 1);
 
 	bool const& fXDirectionPositive = (rect.left <= rect.right);
-	//int xStep = fXDirectionPositive ? 1 : -1;
 	int const &xTrueLeft = fXDirectionPositive ? rect.left : (rect.right - 1);
 	int const &xTrueRight = fXDirectionPositive ? rect.right : (rect.left - 1);
 	int const &xWidth = xTrueRight - xTrueLeft;
@@ -264,21 +262,48 @@ void CSubPicProviderAlfaX::EreaseFfBuffer(CRect const & rect)
 	}
 }
 
+DWORD static inline RecoverRGBA_c(DWORD const &pixel00, DWORD const &a)
+{
+	DWORD const &x0 = pixel00;
+
+	DWORD const maskG = 0x0000ff00;
+	DWORD const maskRB = 0x00ff00ff;
+
+	DWORD const& iAff00 = 255 * 256 / a;
+	DWORD const& tRB = (x0 & maskRB);
+	DWORD const& tG = (x0 & maskG) >> 8;
+
+	return (a << 24) | (((tRB * iAff00) >> 8) & maskRB) | ((tG * iAff00) & maskG);
+}
+
+////No improvement
+//DWORD static inline RecoverRGBA_sse2(DWORD const &pixel00, DWORD const &a)
+//{
+//	WORD const& iAff00 = (255 * 512 / a + 1) >> 1;
+//
+//	__m128i zero = _mm_setzero_si128();
+//	__m128i invA = _mm_set_epi16(0, 0, 0, 0, 0, iAff00, iAff00, iAff00);
+//	__m128i mmr0 = _mm_unpacklo_epi8(_mm_cvtsi32_si128(pixel00), zero);
+//	mmr0 = _mm_srli_epi16(_mm_mullo_epi16(invA, mmr0), 8);
+//	mmr0 = _mm_packus_epi16(mmr0, zero);		
+//		
+//	return (a << 24) | _mm_cvtsi128_si32(mmr0);
+//}
+
+typedef DWORD (*FPRecoverRGBA) (DWORD const &pixel00, DWORD const &pixelff);
+
 void CSubPicProviderAlfaX::RecoverRGBA(SubPicDesc const &spd, CRect const & rect)
 {
+	//FPRecoverRGBA fpRecoverRGBA = (g_cpuid.m_flags & CCpuID::sse2) ? &RecoverRGBA_sse2 : &RecoverRGBA_c;
+
 	bool const &fYDirectionPositive = (rect.top <= rect.bottom);
-	//int const &yStep = fYDirectionPositive ? 1 : -1;
 	int const &yTrueTop = fYDirectionPositive ? rect.top : (rect.bottom - 1);
 	int const &yTrueBottom = fYDirectionPositive ? rect.bottom : (rect.top - 1);
 
 	bool const& fXDirectionPositive = (rect.left <= rect.right);
-	//int xStep = fXDirectionPositive ? 1 : -1;
-	//int const &xWidth = 1 + (fXDirectionPositive ? rect.right - rect.left : rect.left - rect.right);
 	int const &xTrueLeft = fXDirectionPositive ? rect.left : (rect.right - 1);
 	int const &xTrueRight = fXDirectionPositive ? rect.right : (rect.left - 1);
-
-	//int const &xDelta = (rect.left * m_lastSpd.bpp) >> 3;
-
+	
 	BYTE* const &b0 = ((BYTE*)spd.bits);
 	BYTE* const &b1 = ((BYTE*)m_lastSpd.bits);
 
@@ -299,28 +324,13 @@ void CSubPicProviderAlfaX::RecoverRGBA(SubPicDesc const &spd, CRect const & rect
 
 			DWORD const maskR = 0x000000ff;
 			DWORD const maskG = 0x0000ff00;
-			DWORD const maskB = 0x00ff0000;
-			//DWORD const maskRB = 0x00ff00ff;
-			DWORD const &rA2 = ((x1 & maskR) - (x0 & maskR)) + 
-				(((x1 & maskG) - (x0 & maskG)) >> 8);
-			DWORD const &tA = 0xff - (rA2 >> 1);
+			DWORD const maskRB = 0x00ff00ff;
 
-			if (tA)	// alpha != 0;
-			{
-				DWORD const& iAff00 = 255 * 256 / tA;
-				DWORD const& tR = (x0 & maskR);
-				DWORD const& tG = (x0 & maskG) >> 8;
-				DWORD const& tB = (x0 & maskB) >> 8;
+			DWORD const &delta = x1 - x0;
+			DWORD const &rA2 = (delta & maskR) + ((delta & maskG) >> 8);
+			DWORD const &tA = maskR ^ ((rA2 + 1) >> 1);	//255 - round(rA2 / 2)
 
-				x0 = (tA << 24) |
-					((tR * iAff00) >> 8) |
-					((tG * iAff00) & maskG) |
-					((tB * iAff00) & maskB);
-			}
-			else
-			{
-				x0 = 0;
-			}
+			x0 = tA ? RecoverRGBA_c(x0, tA) : 0;
 		}
 	}
 }
