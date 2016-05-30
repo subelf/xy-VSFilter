@@ -7,6 +7,7 @@
 
 #include "..\subtitles\VobSubFile.h"
 #include "..\subtitles\SSF.h"
+#include "..\subtitles\RTS.h"
 
 #include "VSSppf.h"
 #include "SubPicProviderAlfa.h"
@@ -34,6 +35,7 @@ STDAPI DllUnregisterServer()
 CVobSubPicProviderAlfaFactory::CVobSubPicProviderAlfaFactory(LPUNKNOWN punk, HRESULT * phr)
 	:CUnknown(_T("CVobSubPicProviderEx2Factory"), punk)
 {
+	CRenderedTextSubtitle::StaticInit();
 }
 
 STDMETHODIMP CVobSubPicProviderAlfaFactory::NonDelegatingQueryInterface(REFIID riid, void ** ppv)

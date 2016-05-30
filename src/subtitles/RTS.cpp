@@ -47,8 +47,8 @@ const int MAX_SUB_PIXEL = 8;
 const double MAX_SUB_PIXEL_F = 8.0;
 
 // WARNING: this isn't very thread safe, use only one RTS a time.
-static HDC g_hDC;
-static int g_hDC_refcnt = 0;
+TSTATIC HDC g_hDC;
+TSTATIC int g_hDC_refcnt = 0;
 
 static long revcolor(long c)
 {

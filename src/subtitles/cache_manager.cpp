@@ -467,7 +467,7 @@ public:
     ScanLineData2MruCache* s_scan_line_data_2_mru_cache;
 };
 
-static Caches s_caches;
+TSTATIC Caches s_caches;
 
 OverlayMruCache* CacheManager::GetOverlayMruCache()
 {

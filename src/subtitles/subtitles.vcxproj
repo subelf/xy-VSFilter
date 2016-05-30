@@ -125,7 +125,7 @@
     <ClInclude Include="xy_int_map.h" />
     <ClInclude Include="xy_malloc.h" />
     <ClInclude Include="xy_overlay_paint_machine.h" />
-    <ClInclude Include="xy_widen_regoin.h" />
+    <ClInclude Include="xy_widen_region.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

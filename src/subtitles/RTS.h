@@ -59,7 +59,7 @@ public:
     CMyFont(const STSStyleBase& style);
 };
 
-typedef ::boost::flyweights::flyweight<::boost::flyweights::key_value<STSStyleBase, CMyFont>, ::boost::flyweights::no_locking> FwCMyFont;
+typedef ::boost::flyweights::flyweight<::boost::flyweights::key_value<STSStyleBase, CMyFont>> FwCMyFont;
 
 class CPolygon;
 
@@ -423,9 +423,9 @@ public:
 class CRenderedTextSubtitle : public CSubPicProviderImpl, public ISubStream, public ISubPicProviderEx2, public CSimpleTextSubtitle
 {
 
-    static CAtlArray<AssCmdPosLevel> m_cmd_pos_level;
+	TSTATIC CAtlArray<AssCmdPosLevel> m_cmd_pos_level;
 
-    static CAtlMap<CStringW, AssCmdType, CStringElementTraits<CStringW>> m_cmdMap;
+	TSTATIC CAtlMap<CStringW, AssCmdType, CStringElementTraits<CStringW>> m_cmdMap;
 
     TagCache m_tagCache;
 public:
@@ -529,4 +529,17 @@ public:
     STDMETHODIMP_(int) GetStream();
     STDMETHODIMP SetStream(int iStream);
     STDMETHODIMP Reload();
+
+	static void StaticInit()
+	{
+		static bool initialized = false;
+		if (!initialized)
+		{
+			Rasterizer::StaticInit();
+			CSimpleTextSubtitle::StaticInit();
+			FwCMyFont::init();
+
+			initialized = true;
+		}
+	}
 };

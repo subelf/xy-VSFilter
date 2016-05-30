@@ -119,10 +119,11 @@ private:
 // WidenRegionCreater
 // 
 
+WidenRegionCreater WidenRegionCreater::result;
+WidenRegionCreaterImpl WidenRegionCreater::impl;
+
 WidenRegionCreater* WidenRegionCreater::GetDefaultWidenRegionCreater()
 {
-    static WidenRegionCreater result;
-    static WidenRegionCreaterImpl impl;
     result.m_impl = &impl;
     return &result;
 }

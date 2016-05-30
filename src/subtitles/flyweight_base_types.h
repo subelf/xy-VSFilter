@@ -9,6 +9,8 @@
 
 #include "mru_cache.h"
 
+#define TSTATIC __declspec(thread) static
+
 template<>
 struct std::equal_to<CRect>
 {	// functor for operator==
@@ -18,7 +20,7 @@ struct std::equal_to<CRect>
     }
 };
 
-typedef ::boost::flyweights::flyweight<CRect, ::boost::flyweights::no_locking> FwRect;
+typedef ::boost::flyweights::flyweight<CRect> FwRect;
 
 template<
     typename V,
@@ -52,7 +54,8 @@ public:
         }
     };
 
-    typedef EnhancedXyMru<SharedConstV, IdType, SharedVElementTraits> Cacher;    
+    typedef EnhancedXyMru<SharedConstV, IdType, SharedVElementTraits> Cacher;
+
 public:
     static const int INVALID_ID = 0;
 public:
@@ -84,13 +87,23 @@ private:
     IdType _id;
 
     static inline IdType AllocId();
+
+	TSTATIC Cacher cacher;
+	TSTATIC IdType cur_id;
 };
+
+template<typename V, int DEFAULT_CACHE_SIZE, class VTraits>
+typename XyFlyWeight<V, DEFAULT_CACHE_SIZE, VTraits>::Cacher
+XyFlyWeight<V, DEFAULT_CACHE_SIZE, VTraits>::cacher(DEFAULT_CACHE_SIZE);
+
+template<typename V, int DEFAULT_CACHE_SIZE, class VTraits>
+typename XyFlyWeight<V, DEFAULT_CACHE_SIZE, VTraits>::IdType
+XyFlyWeight<V, DEFAULT_CACHE_SIZE, VTraits>::cur_id = INVALID_ID;
 
 template<typename V, int DEFAULT_CACHE_SIZE, class VTraits>
 inline
 typename XyFlyWeight<V, DEFAULT_CACHE_SIZE, VTraits>::Cacher* XyFlyWeight<V, DEFAULT_CACHE_SIZE, VTraits>::GetCacher()
 {
-    static Cacher cacher(DEFAULT_CACHE_SIZE);
     return &cacher;
 }
 
@@ -98,7 +111,6 @@ template<typename V, int DEFAULT_CACHE_SIZE, class VTraits>
 inline
 typename XyFlyWeight<V, DEFAULT_CACHE_SIZE, VTraits>::IdType XyFlyWeight<V, DEFAULT_CACHE_SIZE, VTraits>::AllocId()
 {
-    static IdType cur_id=INVALID_ID;
     ++cur_id;
     if (cur_id==INVALID_ID)
     {

@@ -260,5 +260,7 @@ public:
                              const DWORD      *switchpts, 
                              bool              fBody    , 
                              bool              fBorder);
+
+	static void StaticInit();
 };
 

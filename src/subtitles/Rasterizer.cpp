@@ -890,6 +890,9 @@ bool Rasterizer::IsItReallyBlur( float be_strength, double gaussian_blur_strengt
     return true;
 }
 
+typedef ::boost::flyweight<::boost::flyweights::key_value<double, ass_synth_priv, GaussianFilterKey<ass_synth_priv>>> fw_ass_synth_priv;
+typedef ::boost::flyweight<::boost::flyweights::key_value<double, GaussianCoefficients, GaussianFilterKey<GaussianCoefficients>>> FwGaussianCoefficients;
+
 // @return: true if actually a blur operation has done, or else false and output is leave unset.
 // To Do: rewrite it or delete it
 bool Rasterizer::OldFixedPointBlur(const Overlay& input_overlay, float be_strength, double gaussian_blur_strength, 
@@ -1002,10 +1005,8 @@ bool Rasterizer::OldFixedPointBlur(const Overlay& input_overlay, float be_streng
     {
         byte* plan_selected= output_overlay->mfWideOutlineEmpty ? body : border;
         
-        flyweight<key_value<double, ass_synth_priv, GaussianFilterKey<ass_synth_priv>>, no_locking>
-            fw_priv_blur_x(gaussian_blur_strength_x);
-        flyweight<key_value<double, ass_synth_priv, GaussianFilterKey<ass_synth_priv>>, no_locking>
-            fw_priv_blur_y(gaussian_blur_strength_y);
+		fw_ass_synth_priv fw_priv_blur_x(gaussian_blur_strength_x);
+		fw_ass_synth_priv fw_priv_blur_y(gaussian_blur_strength_y);
 
         const ass_synth_priv& priv_blur_x = fw_priv_blur_x.get();
         const ass_synth_priv& priv_blur_y = fw_priv_blur_y.get();
@@ -1118,10 +1119,8 @@ bool Rasterizer::GaussianBlur( const Overlay& input_overlay, double gaussian_blu
     if( gaussian_blur_radius_y < 1 && gaussian_blur_strength>GAUSSIAN_BLUR_THREHOLD )
         gaussian_blur_radius_y = 1;//make sure that it really do a blur
 
-    flyweight<key_value<double, GaussianCoefficients, GaussianFilterKey<GaussianCoefficients>>, no_locking>
-        fw_filter_x(gaussian_blur_strength_x);
-    flyweight<key_value<double, GaussianCoefficients, GaussianFilterKey<GaussianCoefficients>>, no_locking>
-        fw_filter_y(gaussian_blur_strength_y);
+	FwGaussianCoefficients fw_filter_x(gaussian_blur_strength_x);
+	FwGaussianCoefficients fw_filter_y(gaussian_blur_strength_y);
 
     const GaussianCoefficients& filter_x = fw_filter_x.get();
     const GaussianCoefficients& filter_y = fw_filter_y.get();
@@ -1266,6 +1265,12 @@ bool Rasterizer::BeBlur( const Overlay& input_overlay, float be_strength,
     }
 
     return true;
+}
+
+void Rasterizer::StaticInit()
+{
+	fw_ass_synth_priv::init();
+	FwGaussianCoefficients::init();
 }
 
 ///////////////////////////////////////////////////////////////////////////

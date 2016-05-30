@@ -16,6 +16,9 @@ private:
     ~WidenRegionCreater();
 
     WidenRegionCreaterImpl* m_impl;
+
+	TSTATIC WidenRegionCreater result;
+	TSTATIC WidenRegionCreaterImpl impl;
 };
 
 #endif // __XY_WIDEN_REGOIN_ECAEEA0A_9D51_4284_B0AE_081AF0E75438_H__
