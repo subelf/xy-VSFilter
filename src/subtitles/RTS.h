@@ -472,7 +472,7 @@ private:
     void ClearUnCachedSubtitle(CSubtitle2List& sub2List);
     void ShrinkCache();
 private:
-    static std::size_t s_max_cache_size;
+    TSTATIC std::size_t s_max_cache_size;
 protected:
     virtual void OnChanged();
     
@@ -530,5 +530,7 @@ public:
     STDMETHODIMP SetStream(int iStream);
     STDMETHODIMP Reload();
 
-	static void StaticInit();
+	static void GlobalStaticInit();
+	static void ThreadStaticInit();
+	static void ThreadStaticDeInit();
 };

@@ -1905,7 +1905,7 @@ typedef bool (*STSOpenFunct)(CTextFile* file, CSimpleTextSubtitle& ret, int Char
 
 typedef struct {STSOpenFunct open; tmode mode;} OpenFunctStruct;
 
-static OpenFunctStruct OpenFuncts[] =
+static const OpenFunctStruct OpenFuncts[] =
 {
     OpenSubStationAlpha, TIME,
     OpenSubRipper      , TIME,
@@ -1920,7 +1920,7 @@ static OpenFunctStruct OpenFuncts[] =
     OpenRealText       , TIME,
 };
 
-static int nOpenFuncts = countof(OpenFuncts);
+static int const nOpenFuncts = countof(OpenFuncts);
 
 //
 

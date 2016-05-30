@@ -1267,10 +1267,17 @@ bool Rasterizer::BeBlur( const Overlay& input_overlay, float be_strength,
     return true;
 }
 
-void Rasterizer::StaticInit()
+void Rasterizer::GlobalStaticInit()
 {
-	fw_ass_synth_priv::init();
-	FwGaussianCoefficients::init();
+	TSTATIC bool gInitialized = false;
+
+	if (!gInitialized)
+	{
+		fw_ass_synth_priv::init();
+		FwGaussianCoefficients::init();
+
+		gInitialized = true;
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////

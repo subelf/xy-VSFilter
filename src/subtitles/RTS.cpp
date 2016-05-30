@@ -1670,10 +1670,7 @@ CRenderedTextSubtitle::CRenderedTextSubtitle(CCritSec* pLock)
     : CSubPicProviderImpl(pLock)
     , m_target_scale_x(1.0), m_target_scale_y(1.0)
 {
-    if( m_cmdMap.IsEmpty() )
-    {
-        InitCmdMap();
-    }
+	ThreadStaticInit();
     m_size = CSize(0, 0);
     if(g_hDC_refcnt == 0)
     {
@@ -1910,8 +1907,7 @@ void CRenderedTextSubtitle::Deinit()
     XyFwGroupedDrawItemsHashKey::GetCacher()->RemoveAll();
 	XyFwStringW::GetCacher()->RemoveAll();
 
-	CacheManager::Destroy();
-	WidenRegionCreater::Destroy();
+	ThreadStaticDeInit();
 }
 
 void CRenderedTextSubtitle::ParseEffect(CSubtitle* sub, const CStringW& str)
@@ -3607,15 +3603,34 @@ STDMETHODIMP CRenderedTextSubtitle::Unlock()
     return CSubPicProviderImpl::Unlock();
 }
 
-void CRenderedTextSubtitle::StaticInit()
+void CRenderedTextSubtitle::GlobalStaticInit()
 {
-	static bool initialized = false;
-	if (!initialized)
+	GSTATIC bool gInitialized = false;
+	if (!gInitialized)
 	{
-		Rasterizer::StaticInit();
-		CSimpleTextSubtitle::StaticInit();
 		FwCMyFont::init();
+		Rasterizer::GlobalStaticInit();
+		CSimpleTextSubtitle::GlobalStaticInit();
 
-		initialized = true;
+		gInitialized = true;
 	}
+}
+
+void CRenderedTextSubtitle::ThreadStaticInit()
+{
+	GlobalStaticInit();
+	if (m_cmdMap.IsEmpty())
+	{
+		InitCmdMap();
+	}
+}
+
+//Get ready to exit the thread,
+//While restarting a task from ThreadStaticInit is also welcome.
+void CRenderedTextSubtitle::ThreadStaticDeInit()
+{
+	CacheManager::Destroy();
+	WidenRegionCreater::Destroy();
+	m_cmdMap.RemoveAll();
+	m_cmd_pos_level.RemoveAll();
 }

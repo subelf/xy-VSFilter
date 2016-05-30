@@ -18,6 +18,7 @@ class CVobSubRectList :
 public:
 	CVobSubRectList();
 	CVobSubRectList(CAtlList<CRect> const &rectList);
+	~CVobSubRectList();
 
 	DECLARE_IUNKNOWN;
 	STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void** ppv);

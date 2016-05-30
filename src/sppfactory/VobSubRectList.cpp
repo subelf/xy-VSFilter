@@ -17,6 +17,11 @@ CVobSubRectList::CVobSubRectList(CAtlList<CRect> const &rectList) :
 	this->m_list.AddTailList(&rectList);
 }
 
+CVobSubRectList::~CVobSubRectList()
+{
+	this->RemoveAll();
+}
+
 STDMETHODIMP CVobSubRectList::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
 	return

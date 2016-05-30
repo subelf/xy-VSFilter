@@ -35,7 +35,7 @@ STDAPI DllUnregisterServer()
 CVobSubPicProviderAlfaFactory::CVobSubPicProviderAlfaFactory(LPUNKNOWN punk, HRESULT * phr)
 	:CUnknown(_T("CVobSubPicProviderEx2Factory"), punk)
 {
-	CRenderedTextSubtitle::StaticInit();
+	CRenderedTextSubtitle::GlobalStaticInit();
 }
 
 STDMETHODIMP CVobSubPicProviderAlfaFactory::NonDelegatingQueryInterface(REFIID riid, void ** ppv)

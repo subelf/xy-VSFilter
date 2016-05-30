@@ -286,15 +286,15 @@ public:
 
     void SetStr(int i, CStringW str, bool fUnicode);
 
-	static void StaticInit()
+	static void GlobalStaticInit()
 	{
-		static bool initialized = false;
-		if (!initialized)
+		GSTATIC bool gInitialized = false;
+		if (!gInitialized)
 		{
 			FwRectCoor2::init();
 			FwSTSStyle::init();
 
-			initialized = true;
+			gInitialized = true;
 		}
 	}
 

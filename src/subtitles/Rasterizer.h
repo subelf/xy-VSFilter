@@ -261,6 +261,6 @@ public:
                              bool              fBody    , 
                              bool              fBorder);
 
-	static void StaticInit();
+	static void GlobalStaticInit();
 };
 

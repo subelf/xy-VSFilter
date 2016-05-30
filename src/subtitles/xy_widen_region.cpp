@@ -163,11 +163,15 @@ WidenRegionCreaterImpl::WidenRegionCreaterImpl(): m_ellipse(NULL)
 
 WidenRegionCreaterImpl::~WidenRegionCreaterImpl()
 {
+	this->Destroy();
 }
 
 void WidenRegionCreaterImpl::Destroy()
 {
-	delete m_ellipse;
+	if (m_ellipse != NULL)
+	{
+		delete m_ellipse; m_ellipse = NULL;
+	}
 }
 
 void WidenRegionCreaterImpl::xy_overlap_region(SpanBuffer* dst, const SpanBuffer& src, int rx, int ry)

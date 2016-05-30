@@ -10,6 +10,7 @@
 #include "mru_cache.h"
 
 #define TSTATIC __declspec(thread) static
+#define GSTATIC static
 
 template<>
 struct std::equal_to<CRect>
