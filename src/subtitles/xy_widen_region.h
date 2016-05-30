@@ -9,6 +9,7 @@ public:
 
 public:
     static WidenRegionCreater* GetDefaultWidenRegionCreater();
+	static void Destroy();
 
     void xy_overlap_region(SpanBuffer* dst, const SpanBuffer& src, int rx, int ry);
 private:

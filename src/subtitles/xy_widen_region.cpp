@@ -102,6 +102,8 @@ public:
     ~WidenRegionCreaterImpl();
 
     void xy_overlap_region(SpanBuffer* dst, const SpanBuffer& src, int rx, int ry);
+	void Destroy();
+
 private:
     //return <ry if arc(o)<inner_pl, >ry if arc(0)>inner_pl, else cross_line exists
     int cross_left(const LinkArc& arc, XY_POINT center);
@@ -126,6 +128,14 @@ WidenRegionCreater* WidenRegionCreater::GetDefaultWidenRegionCreater()
 {
     result.m_impl = &impl;
     return &result;
+}
+
+void WidenRegionCreater::Destroy()
+{
+	if (result.m_impl != NULL)
+	{
+		result.m_impl->Destroy();
+	}
 }
 
 WidenRegionCreater::WidenRegionCreater():m_impl(NULL)
@@ -153,7 +163,11 @@ WidenRegionCreaterImpl::WidenRegionCreaterImpl(): m_ellipse(NULL)
 
 WidenRegionCreaterImpl::~WidenRegionCreaterImpl()
 {
-    delete m_ellipse;
+}
+
+void WidenRegionCreaterImpl::Destroy()
+{
+	delete m_ellipse;
 }
 
 void WidenRegionCreaterImpl::xy_overlap_region(SpanBuffer* dst, const SpanBuffer& src, int rx, int ry)

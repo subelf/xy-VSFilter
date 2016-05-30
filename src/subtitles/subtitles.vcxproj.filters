@@ -194,9 +194,6 @@
     <ClInclude Include="xy_bitmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="xy_circular_array_queue.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="hdmv_subtitle_provider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -207,6 +204,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xy_widen_region.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xy_circular_array_queue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

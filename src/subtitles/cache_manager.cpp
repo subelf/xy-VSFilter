@@ -433,23 +433,47 @@ public:
         s_subpixel_variance_cache = NULL;
         //s_ass_tag_list_cache = NULL;
     }
+
     ~Caches()
     {
-        delete s_bitmap_cache;
-        delete s_clipper_alpha_mask_cache;
+		this->Destroy();
+	}
 
-        delete s_text_info_cache;
-        delete s_path_data_mru_cache;
-        delete s_scan_line_data_2_mru_cache;
-        delete s_overlay_no_blur_mru_cache;
-        delete s_overlay_mru_cache;
+	void Destroy()
+	{
+		if (s_bitmap_cache != NULL)
+		{ delete s_bitmap_cache; s_bitmap_cache = NULL; }
 
-        delete s_scan_line_data_mru_cache;
-        delete s_overlay_no_offset_mru_cache;
+		if (s_clipper_alpha_mask_cache != NULL)
+		{ delete s_clipper_alpha_mask_cache; s_clipper_alpha_mask_cache = NULL; }
 
-        delete s_subpixel_variance_cache;
-        //delete s_ass_tag_list_cache;
-    }
+		if (s_text_info_cache != NULL)
+		{ delete s_text_info_cache; s_text_info_cache = NULL; }
+
+		if (s_path_data_mru_cache != NULL) 
+		{ delete s_path_data_mru_cache; s_path_data_mru_cache = NULL; }
+
+		if (s_scan_line_data_2_mru_cache != NULL)
+		{ delete s_scan_line_data_2_mru_cache; s_scan_line_data_2_mru_cache = NULL; }
+
+		if (s_overlay_no_blur_mru_cache != NULL)
+		{ delete s_overlay_no_blur_mru_cache; s_overlay_no_blur_mru_cache = NULL; }
+
+		if (s_overlay_mru_cache != NULL)
+		{ delete s_overlay_mru_cache; s_overlay_mru_cache = NULL; }
+
+		if (s_scan_line_data_mru_cache != NULL)
+		{ delete s_scan_line_data_mru_cache; s_scan_line_data_mru_cache = NULL; }
+
+		if (s_overlay_no_offset_mru_cache != NULL)
+		{ delete s_overlay_no_offset_mru_cache; s_overlay_no_offset_mru_cache = NULL; }
+
+		if (s_subpixel_variance_cache != NULL)
+		{ delete s_subpixel_variance_cache; s_subpixel_variance_cache = NULL; }
+
+		//if(s_ass_tag_list_cache != NULL) { delete s_ass_tag_list_cache; s_ass_tag_list_cache = NULL; }
+	}
+
 public:
     BitmapMruCache* s_bitmap_cache;
     ClipperAlphaMaskMruCache* s_clipper_alpha_mask_cache;
@@ -566,4 +590,9 @@ BitmapMruCache* CacheManager::GetBitmapMruCache()
         s_caches.s_bitmap_cache = DEBUG_NEW BitmapMruCache(BITMAP_MRU_CACHE_ITEM_NUM);
     }
     return s_caches.s_bitmap_cache;
+}
+
+void CacheManager::Destroy()
+{
+	s_caches.Destroy();
 }

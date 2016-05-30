@@ -324,6 +324,8 @@ public:
     static OverlayNoBlurMruCache* GetOverlayNoBlurMruCache();
     static ScanLineData2MruCache* GetScanLineData2MruCache();
     static PathDataMruCache* GetPathDataMruCache();
+
+	static void Destroy();
 };
 
 

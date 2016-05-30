@@ -392,9 +392,10 @@ void XySubRenderFrame::MoveTo( int x, int y )
 // XySubRenderFrameCreater
 // 
 
+TSTATIC XySubRenderFrameCreater s_default_creater;
+
 XySubRenderFrameCreater* XySubRenderFrameCreater::GetDefaultCreater()
 {
-    static XySubRenderFrameCreater s_default_creater;
     return &s_default_creater;
 }
 

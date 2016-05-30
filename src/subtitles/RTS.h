@@ -530,16 +530,5 @@ public:
     STDMETHODIMP SetStream(int iStream);
     STDMETHODIMP Reload();
 
-	static void StaticInit()
-	{
-		static bool initialized = false;
-		if (!initialized)
-		{
-			Rasterizer::StaticInit();
-			CSimpleTextSubtitle::StaticInit();
-			FwCMyFont::init();
-
-			initialized = true;
-		}
-	}
+	static void StaticInit();
 };

@@ -52,7 +52,7 @@ private:
     }
     SUBPIXEL_LEVEL _subpixel_level;
     SUBPIXEL_MASK _subpixel_mask;
-    static SubpixelPositionControler s_subpixel_position_controler;
+    TSTATIC SubpixelPositionControler s_subpixel_position_controler;
 };
 
 #endif // end of __SUBPIXEL_POSITION_CONTROLER_H_61444994_2880_4407_9308_4B17D0259B2C__
