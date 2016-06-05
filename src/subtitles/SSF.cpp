@@ -124,8 +124,8 @@ namespace ssf
 
 	STDMETHODIMP_(POSITION) CRenderer::GetStartPosition(REFERENCE_TIME rt, double fps)
 	{
-		size_t k;
-		return m_file && m_file->m_segments.Lookup((float)rt/10000000, k) ? (POSITION)(++k) : NULL;
+		bool isWithin = false;
+		return m_file ? (POSITION)(m_file->m_segments.Lookup((float)rt / 10000000, isWithin) + 1) : NULL;
 	}
 
 	STDMETHODIMP_(POSITION) CRenderer::GetNext(POSITION pos)

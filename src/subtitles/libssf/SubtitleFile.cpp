@@ -274,21 +274,43 @@ namespace ssf
 
 	bool SubtitleFile::SegmentList::Lookup(float at, size_t& k)
 	{
-		if(!Index()) return false;
-
-		size_t i = 0, j = m_index.GetCount()-1;
-
-		if(m_index[i]->m_start <= at && at < m_index[j]->m_stop)
-		do
+		bool isWithin = false;
+		auto r = Lookup(at, isWithin);
+		r = isWithin ? r : -1;
+		
+		if (r == -1)
 		{
-			k = (i+j)/2;
-			if(m_index[k]->m_start <= at && at < m_index[k]->m_stop) {return true;}
-			else if(at < m_index[k]->m_start) {if(j == k) k--; j = k;}
-			else if(at >= m_index[k]->m_stop) {if(i == k) k++; i = k;}
+			return false;
 		}
-		while(i <= j);
+		else
+		{
+			k = r;
+			return true;
+		}
+	}
 
-		return false;
+	size_t SubtitleFile::SegmentList::Lookup(float from, bool& isWithin)
+	{
+		size_t const& c = Index();
+		size_t i = 0, j = c;
+
+		while (i < j)
+		{
+			auto m = (i + j) >> 1;
+			auto const& mv = m_index[m]->m_stop;
+			if (from < mv) j = m;
+			else i = m + 1;
+		}
+
+		if (i < c)
+		{
+			isWithin = (from >= m_index[i]->m_start);
+			return i;
+		}
+		else
+		{
+			return -1;
+		}
 	}
 
 	const SubtitleFile::Segment* SubtitleFile::SegmentList::GetSegment(size_t k)

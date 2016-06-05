@@ -114,6 +114,7 @@ protected:
     bool GetFrame(size_t idx, size_t nLang = -1, REFERENCE_TIME rt = -1);
     bool GetFrameByTimeStamp(__int64 time);
     size_t GetFrameIdxByTimeStamp(__int64 time);
+	size_t FindFrameIdxFrom(__int64 time, bool *isWithin);
 
     bool SaveVobSub(CString fn, int delay);
     bool SaveWinSubMux(CString fn, int delay);

@@ -57,6 +57,7 @@ namespace ssf
 			void Insert(float start, float stop, Definition* pDef);
 			void Lookup(float at, CAtlList<SegmentItem>& sis);
 			bool Lookup(float at, size_t& k);
+			size_t Lookup(float from, bool& isWithin);
 			const Segment* GetSegment(size_t k);
 		};
 

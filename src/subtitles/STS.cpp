@@ -2350,47 +2350,29 @@ int CSimpleTextSubtitle::SearchSub(int t, double fps)
 const STSSegment* CSimpleTextSubtitle::SearchSubs(int t, double fps, /*[out]*/ int* iSegment, int* nSegments)
 {
     int segmentsCount = m_segments.GetCount();
-    int i = 0, j = segmentsCount - 1;
+	if (nSegments != NULL) *nSegments = segmentsCount;
 
-    if(nSegments) *nSegments = segmentsCount;
-    if(segmentsCount<=0)
-    {
-        if(iSegment!=NULL)
-            *iSegment = 0;
-        TRACE_SUB("No subtitles at "<<XY_LOG_VAR_2_STR(t));
-        return NULL;
-    }
+    int i = 0, j = segmentsCount;
 
-    if(t >= TranslateSegmentEnd(j, fps))
-    {
-        i = j;
-        j++;
-    }
-    if(t < TranslateSegmentEnd(i, fps))
-    {
-        j = i;
-        i--;
-    }
+	while (i < j)
+	{
+		size_t m = (i + j) >> 1;
+		__int64 mv = TranslateSegmentEnd(m, fps);
+		if (t < mv) j = m;
+		else i = m + 1;
+	}
 
-    while(i < j-1)
-    {
-        int mid = (i + j) >> 1;
+	if (iSegment != NULL) *iSegment = i;
 
-        int midt = TranslateSegmentEnd(mid, fps);
-
-        if(t < midt)
-            j=mid;
-        else
-            i=mid;
-    }
-    if(iSegment!=NULL)
-        *iSegment = j;
-    if(j<segmentsCount)
-    {
-        return &m_segments[j];
-    }
-    TRACE_SUB("No subtitles at "<<XY_LOG_VAR_2_STR(t));
-    return(NULL);
+	if (i < segmentsCount)
+	{
+		return &m_segments[i];
+	}
+	else
+	{
+		TRACE_SUB("No subtitles at " << XY_LOG_VAR_2_STR(t));
+		return NULL;
+	}
 }
 
 STSSegment* CSimpleTextSubtitle::SearchSubs2(int t, double fps, /*[out]*/ int* iSegment, int* nSegments)

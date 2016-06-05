@@ -1247,43 +1247,40 @@ bool CVobSubFile::GetFrameByTimeStamp(__int64 time)
 
 size_t CVobSubFile::GetFrameIdxByTimeStamp(__int64 time)
 {
-    if (m_iLang >= m_langs.size() || m_langs[m_iLang].subpos.IsEmpty()) {
-        return -1;
-    }
-
-    CAtlArray<SubPos>& sp = m_langs[m_iLang].subpos;
-
-    size_t i = 0, j = sp.GetCount() - 1, ret = -1;
-
-    if (time >= sp[j].start) {
-        return j;
-    }
-
-    while (i < j) {
-        size_t mid = (i + j) >> 1;
-        __int64 midstart = sp[mid].start;
-
-        if (time == midstart) {
-            ret = mid;
-            break;
-        } else if (time < midstart) {
-            ret = -1;
-            if (j == mid) {
-                mid--;
-            }
-            j = mid;
-        } else if (time > midstart) {
-            ret = mid;
-            if (i == mid) {
-                mid++;
-            }
-            i = mid;
-        }
-    }
-
-    return ret;
+	bool isWithin = false;
+	size_t i = FindFrameIdxFrom(time, &isWithin);
+	return isWithin ? i : -1;
 }
 
+size_t CVobSubFile::FindFrameIdxFrom(__int64 time, bool *pIsWithin)
+{
+	if (m_iLang >= m_langs.size() || m_langs[m_iLang].subpos.IsEmpty()) {
+		return -1;
+	}
+
+	CAtlArray<SubPos>& sp = m_langs[m_iLang].subpos;
+
+	size_t const& c = sp.GetCount();
+	size_t i = 0, j = c;
+
+	while (i < j)
+	{
+		size_t m = (i + j) >> 1;
+		__int64 mv = sp[m].stop;
+		if (time < mv) j = m;
+		else i = m + 1;
+	}
+
+	if (i < c)
+	{
+		if (pIsWithin != NULL) *pIsWithin = (time >= sp[i].start);
+		return i;
+	}
+	else
+	{
+		return -1;
+	}
+}
 //
 
 STDMETHODIMP CVobSubFile::NonDelegatingQueryInterface(REFIID riid, void** ppv)
@@ -1304,7 +1301,7 @@ STDMETHODIMP_(POSITION) CVobSubFile::GetStartPosition(REFERENCE_TIME rt, double 
 {
     rt /= 10000;
 
-    size_t i = GetFrameIdxByTimeStamp(rt);
+    size_t i = FindFrameIdxFrom(rt, NULL);
 
     const SubPos* sp = GetFrameInfo(i);
     if (!sp) {
@@ -1547,15 +1544,24 @@ static void StretchBlt(SubPicDesc& spd, CRect dstrect, CVobSubImage& src)
             PixelAtBiLinear(cc[2], sx,         srcy + srcdy, src);
             PixelAtBiLinear(cc[3], sx + srcdx, srcy + srcdy, src);
 
-            ptr->rgbRed = (cc[0].rgbRed + cc[1].rgbRed + cc[2].rgbRed + cc[3].rgbRed) >> 2;
-            ptr->rgbGreen = (cc[0].rgbGreen + cc[1].rgbGreen + cc[2].rgbGreen + cc[3].rgbGreen) >> 2;
-            ptr->rgbBlue = (cc[0].rgbBlue + cc[1].rgbBlue + cc[2].rgbBlue + cc[3].rgbBlue) >> 2;
-            ptr->rgbReserved = (cc[0].rgbReserved + cc[1].rgbReserved + cc[2].rgbReserved + cc[3].rgbReserved) >> 2;
+			int const &a = ((cc[0].rgbReserved + cc[1].rgbReserved + cc[2].rgbReserved + cc[3].rgbReserved) << 8) / 255;	//alpha * 1024 / 255
+			int const &ia = 4096 - (a << 2);	//4096 * (255 - alpha) / 255
+
+			int const &sr = (cc[0].rgbRed + cc[1].rgbRed + cc[2].rgbRed + cc[3].rgbRed) * a;	//sx = x * alpha * 4096 / 255 
+			int const &sg = (cc[0].rgbGreen + cc[1].rgbGreen + cc[2].rgbGreen + cc[3].rgbGreen) * a;
+			int const &sb = (cc[0].rgbBlue + cc[1].rgbBlue + cc[2].rgbBlue + cc[3].rgbBlue) * a;
+
+			int const &tr = ptr->rgbRed * ia;	//tx = x * 4096 * (255 - alpha) / 255
+			int const &tg = ptr->rgbGreen * ia;
+			int const &tb = ptr->rgbBlue * ia;
+
             ////
-            ptr->rgbRed = ptr->rgbRed * ptr->rgbReserved >> 8;
-            ptr->rgbGreen = ptr->rgbGreen * ptr->rgbReserved >> 8;
-            ptr->rgbBlue = ptr->rgbBlue * ptr->rgbReserved >> 8;
-            ptr->rgbReserved = ~ptr->rgbReserved;
+			int const h = 1 << 11;
+
+            ptr->rgbRed = (sr + tr + h) >> 12;	//(tx + tr + 2048) / 4096
+            ptr->rgbGreen = (sg + tg + h) >> 12;
+            ptr->rgbBlue = (sb + tb + h) >> 12;
+            ptr->rgbReserved = 0;
 
         }
     }
