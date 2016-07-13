@@ -1686,6 +1686,7 @@ CRenderedTextSubtitle::CRenderedTextSubtitle(CCritSec* pLock)
 CRenderedTextSubtitle::~CRenderedTextSubtitle()
 {
     Deinit();
+	ThreadStaticDeInit();
     g_hDC_refcnt--;
     if(g_hDC_refcnt == 0) DeleteDC(g_hDC);
 }
@@ -1906,8 +1907,6 @@ void CRenderedTextSubtitle::Deinit()
     //That is good for ids generated after re-init won't conflict with ids generated before re-init.
     XyFwGroupedDrawItemsHashKey::GetCacher()->RemoveAll();
 	XyFwStringW::GetCacher()->RemoveAll();
-
-	ThreadStaticDeInit();
 }
 
 void CRenderedTextSubtitle::ParseEffect(CSubtitle* sub, const CStringW& str)
