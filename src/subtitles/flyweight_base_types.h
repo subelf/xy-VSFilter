@@ -9,8 +9,12 @@
 
 #include "mru_cache.h"
 
-#define TSTATIC __declspec(thread) static
+#define TSTATIC thread_local static
+#define TEXTERN thread_local extern
+#define TDEFINE thread_local
 #define GSTATIC static
+#define GEXTERN extern
+#define GDEFINE
 
 template<>
 struct std::equal_to<CRect>
@@ -95,11 +99,11 @@ private:
 
 template<typename V, int DEFAULT_CACHE_SIZE, class VTraits>
 typename XyFlyWeight<V, DEFAULT_CACHE_SIZE, VTraits>::Cacher
-XyFlyWeight<V, DEFAULT_CACHE_SIZE, VTraits>::cacher(DEFAULT_CACHE_SIZE);
+TDEFINE XyFlyWeight<V, DEFAULT_CACHE_SIZE, VTraits>::cacher(DEFAULT_CACHE_SIZE);
 
 template<typename V, int DEFAULT_CACHE_SIZE, class VTraits>
 typename XyFlyWeight<V, DEFAULT_CACHE_SIZE, VTraits>::IdType
-XyFlyWeight<V, DEFAULT_CACHE_SIZE, VTraits>::cur_id = INVALID_ID;
+TDEFINE XyFlyWeight<V, DEFAULT_CACHE_SIZE, VTraits>::cur_id = INVALID_ID;
 
 template<typename V, int DEFAULT_CACHE_SIZE, class VTraits>
 inline

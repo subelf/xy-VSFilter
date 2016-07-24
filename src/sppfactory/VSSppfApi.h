@@ -78,6 +78,7 @@ interface __declspec(uuid("5C45E508-8D8E-4FB8-9933-CFA332174012"))
 	IVobSubPicProviderAlfaFactory :
 	public IUnknown
 {
+	STDMETHOD (SetMaxCacheSize) (size_t max_size) const PURE;
 	STDMETHOD (CreateContext) (IVobSubPicProviderContext **ppContext) const PURE;
 	STDMETHOD (CreateProvider) (IVobSubPicProviderContext *pContext, WCHAR const *pStrSubtitlePath, ISubPicProviderAlfa **ppProvider) const PURE;
 };

@@ -1653,9 +1653,9 @@ CRect CScreenLayoutAllocator::AllocRect(CSubtitle* s, int segment, int entry, in
 
 // CRenderedTextSubtitle
 
-CAtlMap<CStringW, AssCmdType, CStringElementTraits<CStringW>> CRenderedTextSubtitle::m_cmdMap;
+GDEFINE CAtlMap<CStringW, AssCmdType, CStringElementTraits<CStringW>> CRenderedTextSubtitle::m_cmdMap;
 
-std::size_t CRenderedTextSubtitle::s_max_cache_size = SIZE_MAX;
+GDEFINE std::size_t CRenderedTextSubtitle::s_max_cache_size = SIZE_MAX;
 
 std::size_t CRenderedTextSubtitle::SetMaxCacheSize( std::size_t max_cache_size )
 {
@@ -1664,7 +1664,7 @@ std::size_t CRenderedTextSubtitle::SetMaxCacheSize( std::size_t max_cache_size )
     return s_max_cache_size;
 }
 
-CAtlArray<AssCmdPosLevel> CRenderedTextSubtitle::m_cmd_pos_level;
+GDEFINE CAtlArray<AssCmdPosLevel> CRenderedTextSubtitle::m_cmd_pos_level;
 
 CRenderedTextSubtitle::CRenderedTextSubtitle(CCritSec* pLock)
     : CSubPicProviderImpl(pLock)
@@ -3610,6 +3610,7 @@ void CRenderedTextSubtitle::GlobalStaticInit()
 		FwCMyFont::init();
 		Rasterizer::GlobalStaticInit();
 		CSimpleTextSubtitle::GlobalStaticInit();
+		InitCmdMap();
 
 		gInitialized = true;
 	}
@@ -3618,10 +3619,6 @@ void CRenderedTextSubtitle::GlobalStaticInit()
 void CRenderedTextSubtitle::ThreadStaticInit()
 {
 	GlobalStaticInit();
-	if (m_cmdMap.IsEmpty())
-	{
-		InitCmdMap();
-	}
 }
 
 //Get ready to exit the thread,
@@ -3630,6 +3627,4 @@ void CRenderedTextSubtitle::ThreadStaticDeInit()
 {
 	CacheManager::Destroy();
 	WidenRegionCreater::Destroy();
-	m_cmdMap.RemoveAll();
-	m_cmd_pos_level.RemoveAll();
 }

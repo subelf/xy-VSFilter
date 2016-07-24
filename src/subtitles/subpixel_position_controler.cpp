@@ -5,7 +5,7 @@
 #include "stdafx.h"
 #include "subpixel_position_controler.h"
 
-SubpixelPositionControler SubpixelPositionControler::s_subpixel_position_controler;
+TDEFINE SubpixelPositionControler SubpixelPositionControler::s_subpixel_position_controler;
 
 SubpixelPositionControler::SUBPIXEL_LEVEL SubpixelPositionControler::SetSubpixelLevel( SUBPIXEL_LEVEL subpixel_level )
 {

@@ -25,6 +25,7 @@
 #include <wxutil.h>
 #include "TextFile.h"
 #include "GFN.h"
+#include "flyweight_base_types.h"
 
 typedef enum {TIME, FRAME} tmode; // the meaning of STSEntry::start/end
 
@@ -308,4 +309,4 @@ extern TCHAR* CharSetNames[];
 extern int    CharSetLen;
 
 class CHtmlColorMap : public CAtlMap<CString, DWORD, CStringElementTraits<CString> > {public: CHtmlColorMap();};
-extern CHtmlColorMap g_colors;
+GEXTERN CHtmlColorMap g_colors;

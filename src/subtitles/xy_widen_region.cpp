@@ -121,8 +121,8 @@ private:
 // WidenRegionCreater
 // 
 
-WidenRegionCreater WidenRegionCreater::result;
-WidenRegionCreaterImpl WidenRegionCreater::impl;
+TDEFINE WidenRegionCreater WidenRegionCreater::result;
+TDEFINE WidenRegionCreaterImpl WidenRegionCreater::impl;
 
 WidenRegionCreater* WidenRegionCreater::GetDefaultWidenRegionCreater()
 {

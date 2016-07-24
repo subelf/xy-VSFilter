@@ -423,9 +423,9 @@ public:
 class CRenderedTextSubtitle : public CSubPicProviderImpl, public ISubStream, public ISubPicProviderEx2, public CSimpleTextSubtitle
 {
 
-	TSTATIC CAtlArray<AssCmdPosLevel> m_cmd_pos_level;
+	GSTATIC CAtlArray<AssCmdPosLevel> m_cmd_pos_level;
 
-	TSTATIC CAtlMap<CStringW, AssCmdType, CStringElementTraits<CStringW>> m_cmdMap;
+	GSTATIC CAtlMap<CStringW, AssCmdType, CStringElementTraits<CStringW>> m_cmdMap;
 
     TagCache m_tagCache;
 public:
@@ -472,7 +472,7 @@ private:
     void ClearUnCachedSubtitle(CSubtitle2List& sub2List);
     void ShrinkCache();
 private:
-    TSTATIC std::size_t s_max_cache_size;
+    GSTATIC std::size_t s_max_cache_size;
 protected:
     virtual void OnChanged();
     

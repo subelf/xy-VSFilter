@@ -15,7 +15,8 @@ public:
 	
 	DECLARE_IUNKNOWN;
 	STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void** ppv);
-
+	
+	STDMETHODIMP SetMaxCacheSize(size_t max_size) const;
 	STDMETHODIMP CreateContext(IVobSubPicProviderContext **ppContext) const;
 	STDMETHODIMP CreateProvider(IVobSubPicProviderContext *pContext, WCHAR const *pStrSubtitlePath, ISubPicProviderAlfa **ppProvider) const;
 

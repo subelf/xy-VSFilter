@@ -45,6 +45,13 @@ STDMETHODIMP CVobSubPicProviderAlfaFactory::NonDelegatingQueryInterface(REFIID r
 		__super::NonDelegatingQueryInterface(riid, ppv);
 }
 
+STDMETHODIMP CVobSubPicProviderAlfaFactory::SetMaxCacheSize(size_t max_size) const
+{
+	CRenderedTextSubtitle::SetMaxCacheSize(max_size);
+
+	return S_OK;
+}
+
 STDMETHODIMP CVobSubPicProviderAlfaFactory::CreateContext(IVobSubPicProviderContext **ppContext) const
 {
 	if (ppContext == nullptr)

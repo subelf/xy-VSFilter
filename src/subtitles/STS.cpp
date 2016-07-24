@@ -199,7 +199,7 @@ CHtmlColorMap::CHtmlColorMap()
         SetAt(htmlcolors[i].name, htmlcolors[i].color);
 }
 
-CHtmlColorMap g_colors;
+GDEFINE CHtmlColorMap g_colors;
 
 CString g_default_style(_T("Default"));
 
